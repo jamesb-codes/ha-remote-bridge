@@ -8,3 +8,4 @@ __pycache__/
 htmlcov/
 remote_bridge_dev.json
 .venv-*/
+remote_bridge.zip
