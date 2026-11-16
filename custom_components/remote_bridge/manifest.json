@@ -1,13 +1,13 @@
 {
   "domain": "remote_bridge",
   "name": "Remote Bridge",
-  "codeowners": ["@mrlurns"],
+  "codeowners": ["@jamesb-codes"],
   "config_flow": true,
   "dependencies": ["network", "zeroconf"],
-  "documentation": "https://github.com/mrlurns/ha-remote-bridge",
+  "documentation": "https://github.com/jamesb-codes/ha-remote-bridge",
   "integration_type": "device",
   "iot_class": "local_push",
-  "issue_tracker": "https://github.com/mrlurns/ha-remote-bridge/issues",
+  "issue_tracker": "https://github.com/jamesb-codes/ha-remote-bridge/issues",
   "requirements": [],
-  "version": "0.2.0"
+  "version": "0.2.1"
 }

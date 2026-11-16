@@ -73,3 +73,7 @@
 - Behaviour change: the TV button's single press is now instant. It only waits
   for a possible double press when a double-press action is mapped or
   detection is turned on.
+
+## v0.2.1
+
+- Links and code owner updated for the renamed GitHub account (jamesb-codes).
