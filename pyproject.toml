@@ -2,7 +2,7 @@
 name = "remote-bridge"
 version = "0.1.0"
 description = "Home Assistant integration: use the iPhone Control Center remote to drive any device"
-requires-python = ">=3.13"
+requires-python = ">=3.14"
 license = "MIT"
 
 [tool.pytest.ini_options]
@@ -13,14 +13,14 @@ asyncio_default_fixture_loop_scope = "function"
 
 [tool.ruff]
 line-length = 110
-target-version = "py313"
+target-version = "py314"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
 ignore = ["RUF012", "SIM108"]
 
 [tool.mypy]
-python_version = "3.13"
+python_version = "3.14"
 mypy_path = "custom_components"
 explicit_package_bases = true
 
@@ -30,3 +30,6 @@ strict = true
 
 [tool.ruff.lint.isort]
 known-first-party = ["remote_bridge", "custom_components"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["E501"]

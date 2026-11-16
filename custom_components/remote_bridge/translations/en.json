@@ -1,0 +1,83 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add a virtual TV",
+        "description": "Creates a TV that your iPhone or iPad can control from Control Center → Remote. Make one per room.",
+        "data": {
+          "name": "Name",
+          "port": "Port"
+        },
+        "data_description": {
+          "name": "Shown in the phone's remote device list.",
+          "port": "TCP port for the phone to connect to. 0 picks a free port."
+        }
+      }
+    },
+    "error": {
+      "name_required": "Enter a name.",
+      "name_in_use": "A virtual TV with this name already exists."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Remote Bridge options",
+        "data": {
+          "allow_pairing": "Allow new pairings"
+        },
+        "data_description": {
+          "allow_pairing": "Lets a new phone pair. Switches itself off after a successful pairing."
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "connected": {
+        "name": "Connected"
+      }
+    },
+    "sensor": {
+      "last_button": {
+        "name": "Last button"
+      }
+    },
+    "button": {
+      "forget_paired_devices": {
+        "name": "Forget paired devices"
+      }
+    }
+  },
+  "device_automation": {
+    "trigger_type": {
+      "up_short": "Up pressed",
+      "up_repeat": "Up repeating while held",
+      "down_short": "Down pressed",
+      "down_repeat": "Down repeating while held",
+      "left_short": "Left pressed",
+      "left_repeat": "Left repeating while held",
+      "right_short": "Right pressed",
+      "right_repeat": "Right repeating while held",
+      "select_short": "Select pressed",
+      "select_long": "Select held",
+      "back_short": "Back pressed",
+      "back_long": "Back held",
+      "home_short": "TV button pressed",
+      "input_long": "Input (TV button held) held",
+      "home_double_double": "TV button double-press pressed",
+      "play_pause_short": "Play/Pause pressed",
+      "volume_up_short": "Volume up pressed",
+      "volume_up_repeat": "Volume up repeating while held",
+      "volume_down_short": "Volume down pressed",
+      "volume_down_repeat": "Volume down repeating while held",
+      "mute_short": "Mute pressed",
+      "power_short": "Power pressed",
+      "siri_short": "Siri pressed",
+      "siri_long": "Siri held",
+      "skip_forward_short": "Skip forward pressed",
+      "skip_back_short": "Skip back pressed",
+      "keyboard_text_text": "Keyboard text entered"
+    }
+  }
+}

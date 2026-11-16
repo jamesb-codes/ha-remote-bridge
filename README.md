@@ -10,16 +10,17 @@ Apple. An iOS update could break it.
 
 ## Status
 
-Phases 0–1 are done: protocol research ([docs/protocol-notes.md](docs/protocol-notes.md))
-and a standalone receiver. The Home Assistant integration comes next.
+Phases 0–3 are done: protocol research ([docs/protocol-notes.md](docs/protocol-notes.md)),
+a standalone receiver, the gesture layer, and the Home Assistant integration skeleton
+(events, device triggers, pairing UX). The mapping UI comes next.
 
 ## Try the standalone receiver
 
-Needs Python 3.13 and a machine on the same network/VLAN as the phone.
+Needs Python 3.14 and a machine on the same network/VLAN as the phone.
 
 ```bash
-python3.13 -m venv .venv && .venv/bin/pip install -r requirements_test.txt
-PYTHONPATH=custom_components .venv/bin/python -m remote_bridge.protocol.dev --name "Test TV"
+python3.14 -m venv .venv && .venv/bin/pip install -r requirements_test.txt
+PYTHONPATH=custom_components/remote_bridge .venv/bin/python -m protocol.dev --name "Test TV"
 ```
 
 Open Control Center → Remote, pick **Test TV**, type the PIN the terminal

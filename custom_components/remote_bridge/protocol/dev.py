@@ -1,6 +1,6 @@
 """Standalone dev receiver: advertise, pair, and print decoded inputs.
 
-PYTHONPATH=custom_components python -m remote_bridge.protocol.dev --name "Test TV"
+PYTHONPATH=custom_components/remote_bridge python -m protocol.dev --name "Test TV"
 """
 
 from __future__ import annotations

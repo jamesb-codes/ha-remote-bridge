@@ -158,7 +158,7 @@ class PairSetupHandler:
             Ed25519PublicKey.from_public_bytes(client_ltpk).verify(
                 signature, ios_device_x + client_id + client_ltpk
             )
-        except (InvalidTag, InvalidSignature, KeyError, ValueError):
+        except InvalidTag, InvalidSignature, KeyError, ValueError:
             self._policy.failed_attempts += 1
             _LOGGER.warning("Pairing failed: client signature or encryption invalid")
             return _error(6, ErrorCode.AUTHENTICATION)
@@ -208,7 +208,7 @@ def _client_name(extra: bytes | None) -> str | None:
         return None
     try:
         info, _ = opack.unpack(extra)
-    except (TypeError, ValueError, IndexError, UnicodeDecodeError):
+    except TypeError, ValueError, IndexError, UnicodeDecodeError:
         return None
     if isinstance(info, dict) and isinstance(info.get("name"), str):
         return str(info["name"])
@@ -274,7 +274,7 @@ class PairVerifyHandler:
             )
             client_id = inner[Tag.IDENTIFIER]
             signature = inner[Tag.SIGNATURE]
-        except (InvalidTag, KeyError):
+        except InvalidTag, KeyError:
             _LOGGER.info("Pair-verify failed: cannot decrypt client proof")
             return _error(4, ErrorCode.AUTHENTICATION), None
 
@@ -287,7 +287,7 @@ class PairVerifyHandler:
             Ed25519PublicKey.from_public_bytes(client.ltpk).verify(
                 signature, client_pub + client_id + our_pub
             )
-        except (InvalidSignature, ValueError):
+        except InvalidSignature, ValueError:
             _LOGGER.warning("Pair-verify refused: bad signature from a paired id")
             return _error(4, ErrorCode.AUTHENTICATION), None
 

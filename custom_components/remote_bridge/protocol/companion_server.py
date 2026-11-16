@@ -245,7 +245,7 @@ class ClientConnection:
                 if payload is None:
                     break
                 await self._handle_frame(header, payload)
-        except (ConnectionError, asyncio.IncompleteReadError):
+        except ConnectionError, asyncio.IncompleteReadError:
             reason = "connection error"
         except _ProtocolViolation as err:
             reason = str(err)

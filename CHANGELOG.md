@@ -28,3 +28,27 @@
   iOS sends after a click is de-duplicated. The volume slider becomes relative
   steps, and skip becomes skip_forward/skip_back.
 - 43 table-driven tests, 100% branch coverage, strict mypy.
+
+## Phase 3: Home Assistant integration skeleton
+
+- Config flow: name plus port (0 = auto). One entry is one virtual TV and gets a
+  device in the device registry.
+- Advertised through HA's shared zeroconf instance (IPv4 announce addresses
+  only) and unregistered on unload. No second Zeroconf instance is created.
+- Identity, port and paired-phone keys are kept in `.storage/remote_bridge.<entry>`
+  (private, 0600) and flushed on unload. The last port is reused so phones
+  reconnect.
+- Pairing: the PIN appears as a persistent notification. "Allow new pairings"
+  defaults on and switches itself off after the first successful pairing;
+  turning it back on clears the failed-PIN lockout. A blocked attempt raises a
+  notification explaining how to allow it.
+- Entities: `binary_sensor.<tv>_connected`, `sensor.<tv>_last_button`, and a
+  `button.<tv>_forget_paired_devices` (which also re-opens pairing).
+- Every press fires `remote_bridge_button`
+  `{entry_id, device_id, name, control, press_type, client, value|text}`.
+  There are 27 device triggers, with labels generated from one control table.
+- Requires Python 3.14 (HA 2026.9+). Tests pass on HA 2026.9.2 and 2026.10.4,
+  including a real pyatv phone pairing, pressing buttons and firing a
+  device-trigger automation.
+- The dev CLI now runs without Home Assistant:
+  `PYTHONPATH=custom_components/remote_bridge python -m protocol.dev`.
