@@ -52,3 +52,24 @@
   device-trigger automation.
 - The dev CLI now runs without Home Assistant:
   `PYTHONPATH=custom_components/remote_bridge python -m protocol.dev`.
+
+## Phase 4: mapping UI (v0.2.0)
+
+- Options are now a menu: Navigation, Volume & power, Media, Input / source,
+  Timing and Pairing. Each page holds a few action pickers (any Home Assistant
+  action sequence), validated before saving.
+- `mapper.py` runs the mapped actions as parallel scripts with the variables
+  `control`, `press_type`, `virtual_tv`, `client`, `value` and `text`. A failing
+  action is logged and never drops the phone's session.
+- Holding a direction or volume key repeats its short-press action, so there is
+  no separate repeat mapping.
+- Input / source: **single** runs one action (e.g. an IR "Input" code);
+  **cycle** steps through up to 6 named inputs on each long press of the TV
+  button, wrapping round. `select.<tv>_input_source` shows the current input,
+  can be corrected by hand without sending anything, and survives restarts.
+- Timing page: long press, double-press window, repeat delay and interval,
+  swipe distance, which controls repeat, and TV double-press detection.
+- All option changes apply live, without a reload, so phones stay connected.
+- Behaviour change: the TV button's single press is now instant. It only waits
+  for a possible double press when a double-press action is mapped or
+  detection is turned on.

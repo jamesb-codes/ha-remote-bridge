@@ -45,6 +45,8 @@ async def test_user_flow_validates_name(hass: HomeAssistant, entry: MockConfigEn
 
 async def test_options_flow_not_loaded(hass: HomeAssistant, entry: MockConfigEntry) -> None:
     result = await hass.config_entries.options.async_init(entry.entry_id)
+    assert result["type"] is FlowResultType.MENU
+    result = await hass.config_entries.options.async_configure(result["flow_id"], {"next_step_id": "pairing"})
     assert result["type"] is FlowResultType.FORM
     result = await hass.config_entries.options.async_configure(result["flow_id"], {CONF_ALLOW_PAIRING: False})
     assert result["type"] is FlowResultType.CREATE_ENTRY

@@ -20,10 +20,20 @@ from .const import (
     ATTR_TEXT,
     ATTR_VALUE,
     CONF_ALLOW_PAIRING,
+    CONF_DOUBLE_TAP_MS,
+    CONF_HOME_DOUBLE,
+    CONF_LONG_PRESS_MS,
+    CONF_REPEAT_CONTROLS,
+    CONF_REPEAT_DELAY_MS,
+    CONF_REPEAT_INTERVAL_MS,
+    CONF_SWIPE_THRESHOLD,
+    DEFAULT_TIMING,
     EVENT_BUTTON,
+    REPEAT_CAPABLE,
     signal_update,
 )
-from .gesture import ControlEvent, GestureEngine, PressType
+from .gesture import ControlEvent, GestureEngine, GestureOptions, PressType
+from .mapper import Mapper
 from .protocol import ClientConnection, CompanionServer, PairedClient, RawInput
 from .store import EntryStore
 
@@ -40,6 +50,7 @@ class RemoteBridgeRuntime:
     device_id: str = ""
     server: CompanionServer = field(init=False)
     engine: GestureEngine = field(init=False)
+    mapper: Mapper = field(init=False)
     advertiser: Advertiser | None = None
     last_event: ControlEvent | None = None
 
@@ -113,9 +124,34 @@ class RemoteBridgeRuntime:
     def on_raw_input(self, raw: RawInput) -> None:
         self.engine.feed(raw)
 
+    async def async_apply_options(self) -> None:
+        """Apply entry options live: mappings, gesture timing, swipe threshold."""
+        options = self.entry.options
+        await self.mapper.async_update(options)
+        self.engine.options = gesture_options(options, self.mapper)
+        self.server.swipe_threshold = float(
+            options.get(CONF_SWIPE_THRESHOLD, DEFAULT_TIMING[CONF_SWIPE_THRESHOLD])
+        )
+        self._refresh_entities()
+
+    @callback
+    def on_input_index(self, index: int) -> None:
+        self._refresh_entities()
+
     @callback
     def on_control(self, event: ControlEvent) -> None:
         self.last_event = event
+        self.mapper.handle(
+            event,
+            {
+                "control": event.control,
+                "press_type": event.press_type.value,
+                "virtual_tv": self.name,
+                "client": event.client,
+                "text": event.value if event.press_type is PressType.TEXT else None,
+                "value": event.value,
+            },
+        )
         data: dict[str, Any] = {
             "entry_id": self.entry.entry_id,
             ATTR_DEVICE_ID: self.device_id,
@@ -140,3 +176,20 @@ class RemoteBridgeRuntime:
     @callback
     def _refresh_entities(self) -> None:
         async_dispatcher_send(self.hass, signal_update(self.entry.entry_id))
+
+
+def gesture_options(options: Any, mapper: Mapper) -> GestureOptions:
+    """Gesture settings from entry options.
+
+    The TV button only waits out the double-press window when a double press
+    is mapped or explicitly enabled, so its single press stays instant.
+    """
+    double = bool(options.get(CONF_HOME_DOUBLE)) or mapper.has_mapping("home_double_double")
+    return GestureOptions(
+        long_press_ms=int(options.get(CONF_LONG_PRESS_MS, DEFAULT_TIMING[CONF_LONG_PRESS_MS])),
+        double_tap_ms=int(options.get(CONF_DOUBLE_TAP_MS, DEFAULT_TIMING[CONF_DOUBLE_TAP_MS])),
+        repeat_delay_ms=int(options.get(CONF_REPEAT_DELAY_MS, DEFAULT_TIMING[CONF_REPEAT_DELAY_MS])),
+        repeat_interval_ms=int(options.get(CONF_REPEAT_INTERVAL_MS, DEFAULT_TIMING[CONF_REPEAT_INTERVAL_MS])),
+        repeat_controls=frozenset(options.get(CONF_REPEAT_CONTROLS, REPEAT_CAPABLE)),
+        double_controls=frozenset({"home"}) if double else frozenset(),
+    )

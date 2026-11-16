@@ -17,6 +17,7 @@ from homeassistant.helpers import device_registry as dr
 from .advertiser import Advertiser
 from .const import DOMAIN, MANUFACTURER, MODEL, PLATFORMS
 from .gesture import GestureEngine
+from .mapper import Mapper
 from .protocol import CompanionServer, PairingPolicy
 from .runtime import RemoteBridgeRuntime
 from .store import EntryStore
@@ -40,6 +41,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: RemoteBridgeConfigEntry)
     )
     runtime = RemoteBridgeRuntime(hass, entry, store, device_id=device.id)
     runtime.engine = GestureEngine(runtime.on_control, hass.loop.call_later)
+    runtime.mapper = Mapper(hass, entry.title, runtime.on_input_index)
     runtime.server = CompanionServer(
         identity,
         store,
@@ -65,8 +67,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: RemoteBridgeConfigEntry)
         raise ConfigEntryNotReady(f"Could not advertise {entry.title}: {err}") from err
 
     entry.runtime_data = runtime
+    await runtime.async_apply_options()
+    entry.async_on_unload(entry.add_update_listener(_async_options_updated))
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
+
+
+async def _async_options_updated(hass: HomeAssistant, entry: RemoteBridgeConfigEntry) -> None:
+    """Options changed: apply them without reloading (phones stay connected)."""
+    await entry.runtime_data.async_apply_options()
 
 
 async def _async_start_server(server: CompanionServer, configured: int, remembered: int | None) -> int:

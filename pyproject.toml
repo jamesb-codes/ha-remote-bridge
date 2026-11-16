@@ -33,3 +33,4 @@ known-first-party = ["remote_bridge", "custom_components"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["E501"]
+"scripts/gen_translations.py" = ["E501"]

@@ -20,15 +20,153 @@
     }
   },
   "options": {
+    "error": {
+      "invalid_actions": "These actions are not valid.",
+      "no_sources": "Add at least one input to use cycle mode."
+    },
     "step": {
       "init": {
         "title": "Remote Bridge options",
+        "menu_options": {
+          "navigation": "Navigation",
+          "volume_power": "Volume & power",
+          "media": "Media",
+          "input": "Input / source (TV button held)",
+          "timing": "Timing",
+          "pairing": "Pairing"
+        }
+      },
+      "navigation": {
+        "title": "Navigation",
+        "description": "Touchpad swipes and clicks, Back and the TV button. Holding a direction repeats its action (see Timing).",
+        "data": {
+          "up_short": "Up pressed",
+          "down_short": "Down pressed",
+          "left_short": "Left pressed",
+          "right_short": "Right pressed",
+          "select_short": "Select pressed",
+          "select_long": "Select held",
+          "back_short": "Back pressed",
+          "back_long": "Back held",
+          "home_short": "TV button pressed",
+          "home_double_double": "TV button double-press pressed"
+        },
+        "data_description": {
+          "up_short": "Runs when this happens. Leave empty to do nothing (the event still fires).",
+          "down_short": "Runs when this happens. Leave empty to do nothing (the event still fires).",
+          "left_short": "Runs when this happens. Leave empty to do nothing (the event still fires).",
+          "right_short": "Runs when this happens. Leave empty to do nothing (the event still fires).",
+          "select_short": "Runs when this happens. Leave empty to do nothing (the event still fires).",
+          "select_long": "Runs when this happens. Leave empty to do nothing (the event still fires).",
+          "back_short": "Runs when this happens. Leave empty to do nothing (the event still fires).",
+          "back_long": "Runs when this happens. Leave empty to do nothing (the event still fires).",
+          "home_short": "Runs when this happens. Leave empty to do nothing (the event still fires).",
+          "home_double_double": "Runs when this happens. Leave empty to do nothing (the event still fires)."
+        }
+      },
+      "volume_power": {
+        "title": "Volume & power",
+        "description": "The phone's volume keys, plus Mute and Power from the remote. Holding a volume key repeats its action.",
+        "data": {
+          "volume_up_short": "Volume up pressed",
+          "volume_down_short": "Volume down pressed",
+          "mute_short": "Mute pressed",
+          "power_short": "Power pressed"
+        },
+        "data_description": {
+          "volume_up_short": "Runs when this happens. Leave empty to do nothing (the event still fires).",
+          "volume_down_short": "Runs when this happens. Leave empty to do nothing (the event still fires).",
+          "mute_short": "Runs when this happens. Leave empty to do nothing (the event still fires).",
+          "power_short": "Runs when this happens. Leave empty to do nothing (the event still fires)."
+        }
+      },
+      "media": {
+        "title": "Media",
+        "description": "Play/Pause, the ±10 s skip buttons and Siri.",
+        "data": {
+          "play_pause_short": "Play/Pause pressed",
+          "skip_forward_short": "Skip forward pressed",
+          "skip_back_short": "Skip back pressed",
+          "siri_short": "Siri pressed",
+          "siri_long": "Siri held"
+        },
+        "data_description": {
+          "play_pause_short": "Runs when this happens. Leave empty to do nothing (the event still fires).",
+          "skip_forward_short": "Runs when this happens. Leave empty to do nothing (the event still fires).",
+          "skip_back_short": "Runs when this happens. Leave empty to do nothing (the event still fires).",
+          "siri_short": "Runs when this happens. Leave empty to do nothing (the event still fires).",
+          "siri_long": "Runs when this happens. Leave empty to do nothing (the event still fires)."
+        }
+      },
+      "input": {
+        "title": "Input / source",
+        "description": "What a long press of the TV button does.",
+        "data": {
+          "input_mode": "Mode",
+          "input_long": "Action (single mode)",
+          "source_1_name": "Input 1 name",
+          "source_1_actions": "Input 1 action",
+          "source_2_name": "Input 2 name",
+          "source_2_actions": "Input 2 action",
+          "source_3_name": "Input 3 name",
+          "source_3_actions": "Input 3 action",
+          "source_4_name": "Input 4 name",
+          "source_4_actions": "Input 4 action",
+          "source_5_name": "Input 5 name",
+          "source_5_actions": "Input 5 action",
+          "source_6_name": "Input 6 name",
+          "source_6_actions": "Input 6 action"
+        },
+        "data_description": {
+          "input_mode": "Single: run one action, e.g. open the TV's input menu. Cycle: each long press moves to the next input below.",
+          "input_long": "Runs on a long press of the TV button in single mode."
+        }
+      },
+      "timing": {
+        "title": "Timing",
+        "data": {
+          "long_press_ms": "Long press",
+          "double_tap_ms": "Double-press window",
+          "repeat_delay_ms": "Repeat starts after",
+          "repeat_interval_ms": "Repeat every",
+          "swipe_threshold": "Swipe distance",
+          "repeat_controls": "Repeat while held",
+          "home_double_press": "Detect TV button double-press"
+        },
+        "data_description": {
+          "long_press_ms": "How long to hold Select, Back, Siri or the TV button for a long press.",
+          "double_tap_ms": "Only used by the TV button double-press.",
+          "repeat_controls": "IR TVs often handle repeats badly; turn off any that misbehave.",
+          "swipe_threshold": "Touchpad units (0-1000). Lower = shorter swipes count.",
+          "home_double_press": "On automatically when a double-press action is set. Delays a single press by the window."
+        }
+      },
+      "pairing": {
+        "title": "Pairing",
         "data": {
           "allow_pairing": "Allow new pairings"
         },
         "data_description": {
           "allow_pairing": "Lets a new phone pair. Switches itself off after a successful pairing."
         }
+      }
+    }
+  },
+  "selector": {
+    "input_mode": {
+      "options": {
+        "single": "Single action",
+        "cycle": "Cycle through inputs"
+      }
+    },
+    "repeat_controls": {
+      "options": {
+        "up": "Up",
+        "down": "Down",
+        "left": "Left",
+        "right": "Right",
+        "volume_up": "Volume up",
+        "volume_down": "Volume down"
       }
     }
   },
@@ -46,6 +184,11 @@
     "button": {
       "forget_paired_devices": {
         "name": "Forget paired devices"
+      }
+    },
+    "select": {
+      "input_source": {
+        "name": "Input source"
       }
     }
   },

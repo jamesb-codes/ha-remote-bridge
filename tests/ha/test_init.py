@@ -109,6 +109,7 @@ async def test_setup_advertises_and_unload_unregisters(
     assert hass.states.get("binary_sensor.test_tv_connected").state == STATE_OFF
     assert hass.states.get("sensor.test_tv_last_button") is not None
     assert hass.states.get("button.test_tv_forget_paired_devices") is not None
+    assert hass.states.get("select.test_tv_input_source").state == "unavailable"  # single mode
 
     assert await hass.config_entries.async_unload(entry.entry_id)
     await hass.async_block_till_done()
@@ -224,6 +225,7 @@ async def test_options_reenable_pairing_resets_lockout(
     await setup(hass, entry)
     entry.runtime_data.server.policy.failed_attempts = 10
     result = await hass.config_entries.options.async_init(entry.entry_id)
+    result = await hass.config_entries.options.async_configure(result["flow_id"], {"next_step_id": "pairing"})
     await hass.config_entries.options.async_configure(result["flow_id"], {CONF_ALLOW_PAIRING: True})
     assert entry.runtime_data.server.policy.failed_attempts == 0
 
