@@ -14,3 +14,17 @@
 - Dev CLI: `python -m remote_bridge.protocol.dev`.
 - Tests: pyatv as a real client (pair, every button, volume, hold, swipe,
   click, skip, power), plus refusal cases and codec cross-checks.
+
+## Phase 2: gesture layer
+
+- `gesture.py` (no Home Assistant imports): raw inputs → `(control, press_type)`
+  with short / long / double / repeat, an injectable clock and scheduler, and
+  per-phone state.
+- Long press fires at the threshold and suppresses the short; a long TV press
+  is `input/long` with no stray `home/short`. Only controls with a double
+  mapping wait out the double-tap window, so navigation stays instant.
+  Repeat can be switched on or off per control.
+- Touchpad swipes map to directions and a tap to select. The trailing touch
+  iOS sends after a click is de-duplicated. The volume slider becomes relative
+  steps, and skip becomes skip_forward/skip_back.
+- 43 table-driven tests, 100% branch coverage, strict mypy.

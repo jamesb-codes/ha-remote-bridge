@@ -25,7 +25,7 @@ mypy_path = "custom_components"
 explicit_package_bases = true
 
 [[tool.mypy.overrides]]
-module = ["remote_bridge.protocol.*"]
+module = ["remote_bridge.protocol.*", "remote_bridge.gesture"]
 strict = true
 
 [tool.ruff.lint.isort]
