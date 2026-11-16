@@ -1,0 +1,10 @@
+# Test/dev tooling. pyatv is only used as a *test client*; the integration
+# itself doesn't depend on it. srptools pinned to pyatv's own pin
+# (pyatv requirements/requirements.txt), newer versions changed the API.
+pyatv==0.18.0
+srptools==1.0.1
+pytest
+pytest-asyncio
+pytest-cov
+ruff
+mypy
